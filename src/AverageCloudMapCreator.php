@@ -36,7 +36,7 @@ class AverageCloudMapCreator
         $this->output->writeln('FINISHED \\o/');
     }
 
-    private function generateCloudmapForDay(\DateTime $dateTime)
+    private function generateCloudmapForDay(\DateTime $dateTime):void
     {
         $month = $dateTime->format('m');
         $day = $dateTime->format('d');
@@ -44,9 +44,9 @@ class AverageCloudMapCreator
         $this->output->writeln('Create cloud map for ' . $month . '-' . $day);
 
         $imageFiles = $this->getImageFiles($dateTime);
-        $this->imageCombiner->combine($imageFiles);
+        $resultImageFile = $this->getResultImageFile($dateTime);
 
-        return $imageFiles;
+        $this->imageCombiner->combine($imageFiles, $resultImageFile);
     }
 
     private function getImageFiles(\DateTime $dateTime): array
@@ -72,5 +72,13 @@ class AverageCloudMapCreator
         }
 
         return $imageFiles;
+    }
+
+    private function getResultImageFile(\DateTime $dateTime): string
+    {
+        $resultImageFile = __DIR__ . '/../results/';
+        FileUtils::createDirectory($resultImageFile);
+
+        return $resultImageFile . 'cloud-map_' . $dateTime->format('m-d') . '.png';
     }
 }

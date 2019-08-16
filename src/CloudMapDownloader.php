@@ -83,10 +83,7 @@ class CloudMapDownloader
     private function getFileName(): string
     {
         $fileName = __DIR__ . '/../temp/cloud_maps/';
-
-        if (!file_exists($fileName)) {
-            mkdir($fileName, 0777, true);
-        }
+        FileUtils::createDirectory($fileName);
 
         $fileName .= $this->satellite . '_' . $this->date . '.png';
 
