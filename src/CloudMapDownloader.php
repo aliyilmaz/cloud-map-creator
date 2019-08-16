@@ -56,8 +56,6 @@ class CloudMapDownloader
             $url = str_replace('{' . $key . '}', $value, $url);
         }
 
-//        var_dump($url);die();
-
         $content = file_get_contents($url);
 
         if ($this->isValidData($content)) {

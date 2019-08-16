@@ -81,9 +81,9 @@ class ImageCombiner
 
     private function meanImages(array $imageFiles): bool
     {
-        $this->output->write('Mean images to final image ' . $this->resultImageImage . '... ');
+        $this->output->write('Mean images to final image ' . $this->resultImageFile . ' ... ');
 
-        if (file_exists($this->resultImageImage)) {
+        if (file_exists($this->resultImageFile)) {
             $this->output->writeln('Ok (File already exists)', false);
             return true;
         }
@@ -97,7 +97,7 @@ class ImageCombiner
             'convert {source} -evaluate-sequence mean \( -clone 0 -alpha off \) \( -clone 0 -alpha extract \) -delete 0 +swap -compose divide -composite "{target}"',
             [
                 'source' => $images,
-                'target' => $this->resultImageImage,
+                'target' => $this->resultImageFile,
             ]
         );
 

@@ -24,7 +24,7 @@ class AverageCloudMapCreator
     {
         $this->output->writeln('START');
 
-        $dateTime = new \DateTime('2000-01-02'); // We must get sure, this one is a leap year!
+        $dateTime = new \DateTime('2000-01-01'); // We must get sure, this one is a leap year!
 
         do {
             $this->generateCloudmapForDay($dateTime);
