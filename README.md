@@ -19,7 +19,7 @@ Solution for Linux (tested on Ubuntu)
 
 ## Installation
 
-To install the tool run `composer install` on the root folder of this project.
+To install the tool run `composer install` in the root folder of this project.
 
 ## Run the tools
 
