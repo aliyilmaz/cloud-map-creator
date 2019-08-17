@@ -36,17 +36,21 @@ class AverageCloudMapCreator
         $this->output->writeln('FINISHED \\o/');
     }
 
-    private function generateCloudmapForDay(\DateTime $dateTime):void
+    private function generateCloudmapForDay(\DateTime $dateTime): void
     {
         $month = $dateTime->format('m');
         $day = $dateTime->format('d');
 
         $this->output->writeln('Create cloud map for ' . $month . '-' . $day);
 
-        $imageFiles = $this->getImageFiles($dateTime);
         $resultImageFile = $this->getResultImageFile($dateTime);
 
-        $this->imageCombiner->combine($imageFiles, $resultImageFile);
+        if (!file_exists($resultImageFile)) {
+            $imageFiles = $this->getImageFiles($dateTime);
+            $this->imageCombiner->combine($imageFiles, $resultImageFile);
+        } else {
+            $this->output->writeln('SKIP: Cloud map already exists');
+        }
     }
 
     private function getImageFiles(\DateTime $dateTime): array

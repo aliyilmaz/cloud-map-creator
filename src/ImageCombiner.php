@@ -4,6 +4,8 @@ namespace App;
 
 class ImageCombiner
 {
+    const TRANSPARENT_IMAGES_DIRECTORY = __DIR__ . '/../temp/transparent/';
+
     private $output;
 
     private $imageFiles = [];
@@ -27,6 +29,8 @@ class ImageCombiner
 
     private function getTransparencyImages(): array
     {
+        FileUtils::deleteDirectory(self::TRANSPARENT_IMAGES_DIRECTORY);
+
         $transparentImageFiles = [];
 
         foreach ($this->imageFiles as $imageFile) {
@@ -43,17 +47,14 @@ class ImageCombiner
 
     private function getFileNameForTransparentImage(string $imageFile): string
     {
-        $transparentImageFile = __DIR__ . '/../temp/transparent/';
-        FileUtils::createDirectory($transparentImageFile);
+        FileUtils::createDirectory(self::TRANSPARENT_IMAGES_DIRECTORY);
 
-        $transparentImageFile .= FileUtils::getFileName($imageFile);
-
-        return $transparentImageFile;
+        return self::TRANSPARENT_IMAGES_DIRECTORY . FileUtils::getFileName($imageFile);
     }
 
     private function addTransparency(string $image, string $transparentImageFile): bool
     {
-        $this->output->write('Add transparency to ' . $image . ' ... ');
+        $this->output->write('Add transparency to ' . FileUtils::getFileName($image) . ' ... ');
 
         if (file_exists($transparentImageFile)) {
             $this->output->writeln('OK (File already exists)', false);
@@ -81,7 +82,7 @@ class ImageCombiner
 
     private function meanImages(array $imageFiles): bool
     {
-        $this->output->write('Mean images to final image ' . $this->resultImageFile . ' ... ');
+        $this->output->write('Mean images to final image ' . FileUtils::getFileName($this->resultImageFile) . ' ... ');
 
         if (file_exists($this->resultImageFile)) {
             $this->output->writeln('Ok (File already exists)', false);

@@ -45,24 +45,23 @@ class CloudMapDownloader
 
     private function getImageUrl(): ?string
     {
-        $url = 'https://neo.sci.gsfc.nasa.gov/view.php?datasetId={satellite}&date={date}';
-
-        $replaceArray = [
-            'satellite' => $this->satellite,
-            'date' => $this->date,
-        ];
-
-        foreach ($replaceArray as $key => $value) {
-            $url = str_replace('{' . $key . '}', $value, $url);
-        }
+        $url = Utils::replace(
+            'https://neo.sci.gsfc.nasa.gov/view.php?datasetId={satellite}&date={date}',
+            [
+                'satellite' => $this->satellite,
+                'date' => $this->date,
+            ]
+        );
 
         $content = file_get_contents($url);
 
         if ($this->isValidData($content)) {
             $pattern = '/si=([0-9]+)&/s';
             if (preg_match($pattern, $content, $matches)) {
-                $url = 'https://neo.sci.gsfc.nasa.gov/servlet/RenderData?si={si}&cs=rgb&format=PNG&width=3600&height=1800';
-                return str_replace('{si}', $matches[1], $url);
+                return Utils::replace(
+                    'https://neo.sci.gsfc.nasa.gov/servlet/RenderData?si={si}&cs=rgb&format=PNG&width=3600&height=1800',
+                    ['si' => $matches[1]]
+                );
             }
         }
 
