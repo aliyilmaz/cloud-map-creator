@@ -20,7 +20,7 @@ class AverageCloudMapCreator
         $this->imageCombiner = new ImageCombiner();
     }
 
-    public function run()
+    public function createDayCloudMaps(): void
     {
         $this->output->writeln('START');
 
@@ -31,7 +31,6 @@ class AverageCloudMapCreator
 
             $dateTime->add(new \DateInterval('P1D'));
         } while ($dateTime->format('Y') === '1999');
-
 
         $this->output->writeln('FINISHED \\o/');
     }

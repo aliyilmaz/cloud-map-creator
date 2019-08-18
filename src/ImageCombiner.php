@@ -9,7 +9,6 @@ class ImageCombiner
     private $output;
 
     private $imageFiles = [];
-    private $resultImageFile;
 
     public function __construct()
     {
@@ -19,12 +18,11 @@ class ImageCombiner
     public function combine(array $imageFiles, string $resultImageFile): void
     {
         $this->imageFiles = $imageFiles;
-        $this->resultImageFile = $resultImageFile;
 
         $this->output->writeln('Combine ' . count($imageFiles) . ' image files');
 
         $imageFilesTransparent = $this->getTransparencyImages();
-        $this->meanImages($imageFilesTransparent);
+        $this->meanImages($imageFilesTransparent, $resultImageFile);
     }
 
     private function getTransparencyImages(): array
@@ -80,11 +78,11 @@ class ImageCombiner
         }
     }
 
-    private function meanImages(array $imageFiles): bool
+    public function meanImages(array $imageFiles, string $resultImageFile): bool
     {
-        $this->output->write('Mean images to final image ' . FileUtils::getFileName($this->resultImageFile) . ' ... ');
+        $this->output->write('Mean ' . count($imageFiles) . ' images to ' . FileUtils::getFileName($resultImageFile) . ' ... ');
 
-        if (file_exists($this->resultImageFile)) {
+        if (file_exists($resultImageFile)) {
             $this->output->writeln('Ok (File already exists)', false);
             return true;
         }
@@ -98,7 +96,7 @@ class ImageCombiner
             'convert {source} -evaluate-sequence mean \( -clone 0 -alpha off \) \( -clone 0 -alpha extract \) -delete 0 +swap -compose divide -composite "{target}"',
             [
                 'source' => $images,
-                'target' => $this->resultImageFile,
+                'target' => $resultImageFile,
             ]
         );
 
