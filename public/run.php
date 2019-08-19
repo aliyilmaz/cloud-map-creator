@@ -2,5 +2,8 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$acmc = new \App\AverageCloudMapCreator();
-$acmc->run();
+$dccm = new \App\Controller\DailyCloudCoverageMapController();
+$dccm->run();
+
+$mdcm = new \App\Controller\MeanDailyCloudMapsController();
+$mdcm->run();

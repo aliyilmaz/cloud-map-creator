@@ -4,59 +4,18 @@ namespace App;
 
 class ImageCombiner
 {
-    const TRANSPARENT_IMAGES_DIRECTORY = __DIR__ . '/../temp/transparent/';
-
     private $output;
-
-    private $imageFiles = [];
-    private $resultImageFile;
 
     public function __construct()
     {
         $this->output = new OutputInterface();
     }
 
-    public function combine(array $imageFiles, string $resultImageFile): void
+    public function addTransparency(string $imageFile, string $resultImageFile): bool
     {
-        $this->imageFiles = $imageFiles;
-        $this->resultImageFile = $resultImageFile;
+        $this->output->write('Add transparency to ' . FileUtils::getFileName($imageFile) . ' ... ');
 
-        $this->output->writeln('Combine ' . count($imageFiles) . ' image files');
-
-        $imageFilesTransparent = $this->getTransparencyImages();
-        $this->meanImages($imageFilesTransparent);
-    }
-
-    private function getTransparencyImages(): array
-    {
-        FileUtils::deleteDirectory(self::TRANSPARENT_IMAGES_DIRECTORY);
-
-        $transparentImageFiles = [];
-
-        foreach ($this->imageFiles as $imageFile) {
-            $transparentImageFile = $this->getFileNameForTransparentImage($imageFile);
-            $ok = $this->addTransparency($imageFile, $transparentImageFile);
-
-            if ($ok) {
-                $transparentImageFiles[] = $transparentImageFile;
-            }
-        }
-
-        return $transparentImageFiles;
-    }
-
-    private function getFileNameForTransparentImage(string $imageFile): string
-    {
-        FileUtils::createDirectory(self::TRANSPARENT_IMAGES_DIRECTORY);
-
-        return self::TRANSPARENT_IMAGES_DIRECTORY . FileUtils::getFileName($imageFile);
-    }
-
-    private function addTransparency(string $image, string $transparentImageFile): bool
-    {
-        $this->output->write('Add transparency to ' . FileUtils::getFileName($image) . ' ... ');
-
-        if (file_exists($transparentImageFile)) {
+        if (file_exists($resultImageFile)) {
             $this->output->writeln('OK (File already exists)', false);
             return true;
         }
@@ -64,8 +23,8 @@ class ImageCombiner
         $command = Utils::replace(
             'convert "{source}" -transparent black "{target}"',
             [
-                'source' => $image,
-                'target' => $transparentImageFile,
+                'source' => $imageFile,
+                'target' => $resultImageFile,
             ]
         );
 
@@ -80,13 +39,18 @@ class ImageCombiner
         }
     }
 
-    private function meanImages(array $imageFiles): bool
+    public function meanImages(array $imageFiles, string $resultImageFile): bool
     {
-        $this->output->write('Mean images to final image ' . FileUtils::getFileName($this->resultImageFile) . ' ... ');
+        $this->output->write('Mean ' . count($imageFiles) . ' images to ' . FileUtils::getFileName($resultImageFile) . ' ... ');
 
-        if (file_exists($this->resultImageFile)) {
+        if (file_exists($resultImageFile)) {
             $this->output->writeln('Ok (File already exists)', false);
             return true;
+        }
+
+        if (count($imageFiles) === 0) {
+            $this->output->writeln('ERROR (No files to mean)', false);
+            return false;
         }
 
         $images = '';
@@ -98,7 +62,7 @@ class ImageCombiner
             'convert {source} -evaluate-sequence mean \( -clone 0 -alpha off \) \( -clone 0 -alpha extract \) -delete 0 +swap -compose divide -composite "{target}"',
             [
                 'source' => $images,
-                'target' => $this->resultImageFile,
+                'target' => $resultImageFile,
             ]
         );
 
