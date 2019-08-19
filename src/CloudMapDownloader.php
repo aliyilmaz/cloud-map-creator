@@ -6,11 +6,14 @@ class CloudMapDownloader
 {
     private $output;
 
+    private $fileDirectory;
+
     private $satellite;
     private $date;
 
-    public function __construct()
+    public function __construct(string $fileDirectory)
     {
+        $this->fileDirectory = $fileDirectory;
         $this->output = new OutputInterface();
     }
 
@@ -73,18 +76,13 @@ class CloudMapDownloader
         $pattern = '/calDate == \'' . $this->date . '\'/s';
 
         return preg_match($pattern, $content);
-
-
     }
 
     private function getFileName(): string
     {
-        $fileName = __DIR__ . '/../temp/cloud_maps/';
-        FileUtils::createDirectory($fileName);
+        FileUtils::createDirectory($this->fileDirectory);
 
-        $fileName .= $this->satellite . '_' . $this->date . '.png';
-
-        return $fileName;
+        return $this->fileDirectory . $this->satellite . '_' . $this->date . '.png';
     }
 
     private function downloadImage(string $imageUrl, string $fileName): bool
