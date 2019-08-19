@@ -7,3 +7,6 @@ $dccm->run();
 
 $mdcm = new \App\Controller\MeanDailyCloudMapsController();
 $mdcm->run();
+
+$cccm = new \App\Controller\ColorCloudCoverageMapController();
+$cccm->run();

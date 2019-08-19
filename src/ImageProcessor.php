@@ -2,7 +2,7 @@
 
 namespace App;
 
-class ImageCombiner
+class ImageProcessor
 {
     private $output;
 

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\CloudMapDownloader;
-use App\ImageCombiner;
+use App\ImageProcessor;
 use App\OutputInterface;
 
 abstract class AbstractController
@@ -12,12 +12,12 @@ abstract class AbstractController
 
     protected $output;
     protected $cloudMapDownloader;
-    protected $imageCombiner;
+    protected $imageProcessor;
 
     public function __construct()
     {
         $this->output = new OutputInterface();
         $this->cloudMapDownloader = new CloudMapDownloader();
-        $this->imageCombiner = new ImageCombiner();
+        $this->imageProcessor = new ImageProcessor();
     }
 }

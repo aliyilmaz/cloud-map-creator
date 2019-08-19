@@ -27,7 +27,7 @@ class MeanDailyCloudMapsController extends AbstractController
 
         $imageFiles = $this->getImageFiles($dateTime);
 
-        $this->imageCombiner->meanImages($imageFiles, $resultImageFile);
+        $this->imageProcessor->meanImages($imageFiles, $resultImageFile);
     }
 
     private function getImageFiles(\DateTime $dateTime): array
