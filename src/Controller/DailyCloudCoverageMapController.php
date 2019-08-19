@@ -39,7 +39,7 @@ class DailyCloudCoverageMapController extends AbstractController
         if (!file_exists($resultImageFile)) {
             $imageFiles = $this->downloadImageFiles($dateTime);
             $imageFiles = $this->addTransparencyToImages($imageFiles);
-            $ok = $this->imageCombiner->meanImages($imageFiles, $resultImageFile);
+            $ok = $this->imageProcessor->meanImages($imageFiles, $resultImageFile);
 
             if ($ok) {
                 FileUtils::deleteDirectory(self::DIRECTORY_TEMP_TRANSPARENT);
@@ -87,7 +87,7 @@ class DailyCloudCoverageMapController extends AbstractController
 
         foreach ($imageFiles as $imageFile) {
             $transparentImageFile = $this->getFileNameForTransparentImage($imageFile);
-            $ok = $this->imageCombiner->addTransparency($imageFile, $transparentImageFile);
+            $ok = $this->imageProcessor->addTransparency($imageFile, $transparentImageFile);
 
             if ($ok) {
                 $transparentImageFiles[] = $transparentImageFile;
