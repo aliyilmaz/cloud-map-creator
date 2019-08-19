@@ -24,7 +24,7 @@ class ColorCloudCoverageMapController extends AbstractController
 
     public function run(): void
     {
-        $imageFiles = $this->getImageFiles();
+        $imageFiles = FileUtils::getFiles(self::IMAGE_SOURCE_DIRECTORY);
 
         $this->output->writeln('Create colored cloud maps for ' . count($imageFiles) . ' files');
 
@@ -35,20 +35,6 @@ class ColorCloudCoverageMapController extends AbstractController
 
             $this->createColoredCloudMap($imageFile, $targetImageFile);
         }
-    }
-
-    private function getImageFiles(): array
-    {
-        $imageFiles = [];
-
-        $handle = opendir(self::IMAGE_SOURCE_DIRECTORY);
-        while ($fileName = readdir($handle)) {
-            if (preg_match('/\.png$/', $fileName)) {
-                $imageFiles[] = self::IMAGE_SOURCE_DIRECTORY . $fileName;
-            }
-        }
-
-        return $imageFiles;
     }
 
     private function createColoredCloudMap(string $imageFile, string $targetImageFile): void

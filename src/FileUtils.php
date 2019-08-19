@@ -42,4 +42,18 @@ class FileUtils
 
         return array_pop($parts);
     }
+
+    public static function getFiles(string $directory): array
+    {
+        $files = [];
+
+        $handle = opendir($directory);
+        while ($fileName = readdir($handle)) {
+            if ($fileName !== '.' && $fileName !== '..') {
+                $files[] = $directory . '/' . $fileName;
+            }
+        }
+
+        return $files;
+    }
 }

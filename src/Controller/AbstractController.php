@@ -8,8 +8,6 @@ use App\OutputInterface;
 
 abstract class AbstractController
 {
-    public abstract function run(): void;
-
     protected $output;
     protected $cloudMapDownloader;
     protected $imageProcessor;
@@ -20,4 +18,6 @@ abstract class AbstractController
         $this->cloudMapDownloader = new CloudMapDownloader();
         $this->imageProcessor = new ImageProcessor();
     }
+
+    public abstract function run(): void;
 }
