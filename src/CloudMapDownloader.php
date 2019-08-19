@@ -11,16 +11,16 @@ class CloudMapDownloader
     private $satellite;
     private $date;
 
-    public function __construct(string $fileDirectory)
+    public function __construct()
     {
-        $this->fileDirectory = $fileDirectory;
         $this->output = new OutputInterface();
     }
 
-    public function download(string $satellite, string $date): ?string
+    public function download(string $fileDirectory, string $satellite, string $date): ?string
     {
         $this->output->write('Download: ' . $satellite . ' | ' . $date . ' ... ');
 
+        $this->fileDirectory = $fileDirectory;
         $this->satellite = $satellite;
         $this->date = $date;
 

@@ -48,6 +48,11 @@ class ImageCombiner
             return true;
         }
 
+        if (count($imageFiles) === 0) {
+            $this->output->writeln('ERROR (No files to mean)', false);
+            return false;
+        }
+
         $images = '';
         foreach ($imageFiles as $imageFile) {
             $images .= '"' . $imageFile . '" ';

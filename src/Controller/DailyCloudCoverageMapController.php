@@ -1,30 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
-class AverageCloudMapCreator
+use App\FileUtils;
+
+class DailyCloudCoverageMapController extends AbstractController
 {
     const SATELLITES = [
         'aqua' => 'MYDAL2_D_CLD_FR',
         'terra' => 'MODAL2_D_CLD_FR',
     ];
 
-    const DIRECTORY_TEMP_RAW = __DIR__ . '/../temp/raw/';
-    const DIRECTORY_TEMP_TRANSPARENT = __DIR__ . '/../temp/transparent/';
-    const DIRECTORY_RESULTS = __DIR__ . '/../results/1d/';
+    const DIRECTORY_TEMP_RAW = __DIR__ . '/../../temp/raw/';
+    const DIRECTORY_TEMP_TRANSPARENT = __DIR__ . '/../../temp/transparent/';
+    const DIRECTORY_RESULTS = __DIR__ . '/../../results/1d/';
 
-    private $output;
-    private $cloudMapDownloader;
-    private $imageCombiner;
-
-    public function __construct()
-    {
-        $this->output = new OutputInterface();
-        $this->cloudMapDownloader = new CloudMapDownloader(self::DIRECTORY_TEMP_RAW);
-        $this->imageCombiner = new ImageCombiner();
-    }
-
-    public function createDayCloudMaps(): void
+    public function run(): void
     {
         $this->output->writeln('START');
 
@@ -79,7 +70,7 @@ class AverageCloudMapCreator
             $date = $year . '-' . $month . '-' . $day;
 
             foreach (self::SATELLITES as $satellite) {
-                $imageFile = $this->cloudMapDownloader->download($satellite, $date);
+                $imageFile = $this->cloudMapDownloader->download(self::DIRECTORY_TEMP_RAW, $satellite, $date);
 
                 if ($imageFile) {
                     $imageFiles[] = $imageFile;
