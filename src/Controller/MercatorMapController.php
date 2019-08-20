@@ -20,7 +20,7 @@ class MercatorMapController extends AbstractController
     {
         parent::__construct();
 
-        $this->projection = new MercatorProjection();
+        $this->projection = new MercatorProjection(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);
     }
 
     public function run(): void
@@ -49,11 +49,14 @@ class MercatorMapController extends AbstractController
             $height = imagesy($image);
 
             for ($y = 0; $y < self::IMAGE_HEIGHT; $y++) {
+                var_dump($y);
                 for ($x = 0; $x < self::IMAGE_WIDTH; $x++) {
-                    $colorX = $this->projection->x2lon($x, self::IMAGE_WIDTH);
-                    $colorY = $this->projection->y2lat($y, self::IMAGE_WIDTH, self::IMAGE_HEIGHT);
+                    $y = 3600;
 
-                    var_dump($colorX, $colorY);
+                    $lon = $this->projection->x2lon($x);
+                    $lat = $this->projection->y2lat($y);
+
+                    var_dump($lon, $lat);die();
 
                     if ($x > 10) {
                         die();
