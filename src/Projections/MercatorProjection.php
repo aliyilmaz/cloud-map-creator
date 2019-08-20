@@ -8,8 +8,6 @@ class MercatorProjection extends AbstractProjection
     {
         $lon  = 360 / $this->width * $x;
 
-        $lon -= 180;
-
         return $lon;
     }
 
@@ -25,18 +23,10 @@ class MercatorProjection extends AbstractProjection
 
     public function y2lat(int $y): float
     {
-        $a = 1 / ($this->width / (2 * M_PI));
-//        $a = exp(($y * 2) * $a);
-//
-//        $lat = (asin(($a - 1) / ($a + 1))) * (180.0 / M_PI);
+        $n = ($this->height / 2 - $y) * (2 * M_PI) / $this->width;
+        $lat = rad2deg(atan(exp($n)) - M_PI / 4) * 2;
 
-//        $latRad = atan(exp(($a * -1 * $y))) - M_PI / 2;
-//        $lat = rad2deg($latRad);
-
-        $n = (($this->height / 2 - $y) * (2 * M_PI)) / $this->width;
-        $lat = (rad2deg(atan(exp($n))) - M_PI / 4) * 2;
-
-        return $lat; // TODO test it
+        return $lat;
     }
 
     public function lat2y(float $lat): int

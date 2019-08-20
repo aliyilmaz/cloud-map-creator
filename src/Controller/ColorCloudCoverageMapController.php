@@ -39,7 +39,7 @@ class ColorCloudCoverageMapController extends AbstractController
 
     private function createColoredCloudMap(string $imageFile, string $targetImageFile): void
     {
-        $this->output->write('Convert ' . FileUtils::getFileName($imageFile) . ' to colored cloud map ...');
+        $this->output->write('Convert ' . FileUtils::getFileName($imageFile) . ' to colored cloud map ... ');
 
         if (!file_exists($targetImageFile)) {
             $image = imagecreatefrompng($imageFile);

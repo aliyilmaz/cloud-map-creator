@@ -40,36 +40,25 @@ class MercatorMapController extends AbstractController
 
     private function createMercatorCloudMap($imageFile, $targetImageFile): void
     {
-        $this->output->write('Convert ' . FileUtils::getFileName($imageFile) . ' to colored cloud map ...');
+        $this->output->write('Convert ' . FileUtils::getFileName($imageFile) . ' to mercator cloud map ... ');
 
         if (!file_exists($targetImageFile)) {
+            $resultImage = imagecreatetruecolor(self::IMAGE_WIDTH, self::IMAGE_HEIGHT);
             $image = imagecreatefrompng($imageFile);
 
-            $width = imagesx($image);
-            $height = imagesy($image);
-
             for ($y = 0; $y < self::IMAGE_HEIGHT; $y++) {
-                var_dump($y);
+                $lat = $this->projection->y2lat($y);
+                $colorY = 1800 - round(($lat + 90) * 10);
+
                 for ($x = 0; $x < self::IMAGE_WIDTH; $x++) {
-                    $y = 3600;
+                    $colorX = $x;
 
-                    $lon = $this->projection->x2lon($x);
-                    $lat = $this->projection->y2lat($y);
-
-                    var_dump($lon, $lat);die();
-
-                    if ($x > 10) {
-                        die();
-                    }
-
-//                    $color = imagecolorallocate($image, $rgbNew[0], $rgbNew[1], $rgbNew[2]);
-//                    imagesetpixel($image, $x, $y, $color);
+                    $color = imagecolorat($image, $colorX, $colorY);
+                    imagesetpixel($resultImage, $x, $y, $color);
                 }
-
-                die();
             }
 
-            imagepng($image, $targetImageFile);
+            imagepng($resultImage, $targetImageFile);
 
             $this->output->writeln('OK', false);
         } else {
