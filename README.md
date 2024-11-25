@@ -2,7 +2,7 @@
 
 This tools downloads the images from NASA's AQUA and TERRA satellites and creates a statistical cloud map for each day of the year.
 
-Data source: https://neo.sci.gsfc.nasa.gov/view.php?datasetId=MODAL2_M_CLD_FR (AQUA + TERRA)
+Data source: [https://neo.gsfc.nasa.gov/view.php?datasetId=MODAL2_M_CLD_FR](https://neo.gsfc.nasa.gov/view.php?datasetId=MODAL2_M_CLD_FR) (AQUA + TERRA)
 
 ## Requirements
 
